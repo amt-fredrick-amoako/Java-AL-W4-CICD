@@ -8,36 +8,30 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/amt-fredrick-amoako/devops.git'
+                git branch: 'main', url: 'https://github.com/amt-fredrick-amoako/Java-AL-W4-CICD.git'
             }
         }
         stage('Compile') {
             steps{
-            dir('labs'){
                 sh "mvn compile"
-            }
             }
 
         }
         stage('Test') {
             steps {
-                dir('labs'){
-                    sh "mvn test"
-                }
+                 sh "mvn test"
             }
         }
         stage('Build') {
             steps {
-                dir('labs'){
-                    sh "mvn package"
-                }
+                 sh "mvn package"
             }
         }
         stage('Build & Tag Docker Image') {
             steps {
                 script{
                     withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                        sh "docker build -t fredamoako/devops:latest ."
+                        sh "docker build -t fredamoako/Java-AL-W4-CICD:latest ."
                     }
                 }
             }
@@ -46,15 +40,15 @@ pipeline {
             steps {
                 script{
                     withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                        sh "docker push fredamoako/devops:latest"
+                        sh "docker push fredamoako/Java-AL-W4-CICD:latest"
                     }
                 }
             }
         }
-        stage('Deploy K8 Clusters'){
-            steps{
-                sh "kubectl apply -f devops.yml"
-            }
-        }
+//         stage('Deploy K8 Clusters'){
+//             steps{
+//                 sh "kubectl apply -f devops.yml"
+//             }
+//         }
     }
 }
